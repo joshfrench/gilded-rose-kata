@@ -1,12 +1,32 @@
 describe("Gilded Rose", function() {
 
   describe("update_quality()", () => {
+    afterEach(() => items = []);
 
     describe("common behaviors", () => {
-      it("should decrease quality");
-      it("should decrease sell-in");
-      it("should decrease quality by 2 if past sell-by");
-      it("should not decrease quality < 0");
+      it("should decrease quality", () => {
+        items.push(new Item("Foo", 10, 20));
+        update_quality();
+        expect(items[0].sell_in).toEqual(9);
+      });
+
+      it("should decrease sell-in", () => {
+        items.push(new Item("Foo", 10, 20));
+        update_quality();
+        expect(items[0].quality).toEqual(19);
+      });
+
+      it("should decrease quality by 2 if past sell-by", () => {
+        items.push(new Item("Foo", 0, 10))
+        update_quality();
+        expect(items[0].quality).toEqual(8);
+      });
+
+      it("should not decrease quality < 0", () => {
+        items.push(new Item("Foo", 0, 1))
+        update_quality();
+        expect(items[0].quality).toEqual(0);
+      });
     });
 
     describe("Brie", () => {
