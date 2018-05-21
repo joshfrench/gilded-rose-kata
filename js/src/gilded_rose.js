@@ -1,3 +1,23 @@
+/**
+ * Here's the process I went through:
+ *
+ * 1) Wrote specs for existing behaviors.
+ * 2) Decided to go with a functional approach, which would allow me to build
+ *    and test low-level functions before overhauling `update_quality`.
+ * 3) With that plumbing in place, swapped out the body of `update_quality`
+ *    and made sure existing specs passed (they did!)
+ * 4) Following the pattern I'd established, added the behavior for conjured
+ *    items along with accompanying specs.
+ *
+ * I've left comments in places where I made major design decisions or had
+ * questions that I'd want clarified in real life. Also noted are a few areas
+ * I'd revisit given more time, but I don't think those are critical to the
+ * refactor.
+ *
+ * Lastly: I want it on record that having to write global functions is _killing_
+ * me, but fixing that is definitely beyond the scope of this exercise ;)
+ */
+
 function Item(name, sell_in, quality) {
   this.name = name;
   this.sell_in = sell_in;
@@ -40,18 +60,19 @@ function updateBrie(item) {
 }
 
 /**
- * We're starting to see some duplication here -- for instance, the boundary
- * checking (`Math.min(50, item.quality)`). It's tempting to DRY that up, but
- * I have no reason based on the spec as written to believe that this
- * particular logic is changing any time soon. Until then, I think it's
- * premature to spend time on it.
+ * We're starting to see some duplication here, e.g. the boundary checking:
+ * `Math.min(50, item.quality)`. It's tempting to DRY that up, but I have no
+ * reason based on the spec as written to believe that this particular logic
+ * is changing any time soon. Until then, I think it's premature to spend
+ * time on it.
  */
 function updateBackstage(item) {
   item.sell_in = item.sell_in - 1;
   item.quality = item.quality + 1;
 
-  // probably a prettier way to do this; i think having multiple conditionals
-  // apply is going to confuse someone later (likely myself)
+  // There's probably a prettier way to do this; I think having
+  // multiple conditionals apply is going to confuse someone later
+  // (likely myself.)
   if (item.sell_in < 10) {
     item.quality = item.quality + 1;
   }
@@ -88,7 +109,7 @@ function updateConjured(item) {
 }
 
 /**
- * I don't love the predicate functions; I think having to keep `isCommon`
+ * I don't love these predicate functions; I think having to keep `isCommon`
  * and `update_quality` in sync as you add new item categories is a likely
  * future gotcha. But that feels like an incremental enhancement that can
  * wait for later.
@@ -117,6 +138,25 @@ function isCommon(item) {
           );
 }
 
+/**
+ * It's debatable whether these predicates should be rolled into the update
+ * methods themselves:
+ *
+ * function updateCommon(item) {
+ *   if (isCommon(item)) {
+ *     // ...perform update
+ *   }
+ *   return item;
+ * }
+ *
+ * function update_quality() {
+ *   items.map(updateCommon)
+ *        .map(updateBrie)
+ *        .map(...)
+ * }
+ *
+ * But that decision doesn't seem critical at the moment.
+ */
 function update_quality() {
   items.filter(isCommon).map(updateCommonItem);
   items.filter(isBrie).map(updateBrie);
