@@ -30,8 +30,17 @@ describe("Gilded Rose", function() {
     });
 
     describe("Brie", () => {
-      it("should increase quality");
-      it("should not increase quality > 50");
+      it("should increase quality", () => {
+        items.push(new Item("Aged Brie", 0, 10));
+        update_quality();
+        expect(items[0].quality).toEqual(12);
+      });
+
+      it("should not increase quality > 50", () => {
+        items.push(new Item("Aged Brie", 0, 49));
+        update_quality();
+        expect(items[0].quality).toEqual(50);
+      });
     });
 
     describe("Backstage", () => {
