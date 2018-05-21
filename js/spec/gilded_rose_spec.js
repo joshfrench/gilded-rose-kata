@@ -4,13 +4,13 @@ describe("Gilded Rose", function() {
     afterEach(() => items = []);
 
     describe("common behaviors", () => {
-      it("should decrease quality", () => {
+      it("should decrease sell_in", () => {
         items.push(new Item("Foo", 10, 20));
         update_quality();
         expect(items[0].sell_in).toEqual(9);
       });
 
-      it("should decrease sell-in", () => {
+      it("should decrease quality", () => {
         items.push(new Item("Foo", 10, 20));
         update_quality();
         expect(items[0].quality).toEqual(19);
