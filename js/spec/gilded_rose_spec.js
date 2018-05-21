@@ -44,11 +44,35 @@ describe("Gilded Rose", function() {
     });
 
     describe("Backstage", () => {
-      it("should increase quality");
-      it("should increase quality by 2 when < 10 days left");
-      it("should increase quality by 3 when < 5 days left");
-      it("should decrease quality to 0 when past sell-by")
-      it("should not increase quality > 50");
+      it("should increase quality", () => {
+        items.push(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
+        update_quality();
+        expect(items[0].quality).toEqual(21);
+      });
+
+      it("should increase quality by 2 when < 10 days left", () => {
+        items.push(new Item("Backstage passes to a TAFKAL80ETC concert", 10, 20));
+        update_quality();
+        expect(items[0].quality).toEqual(22);
+      });
+
+      it("should increase quality by 3 when < 5 days left", () => {
+        items.push(new Item("Backstage passes to a TAFKAL80ETC concert", 5, 20));
+        update_quality();
+        expect(items[0].quality).toEqual(23);
+      });
+
+      it("should decrease quality to 0 when past sell-by", () => {
+        items.push(new Item("Backstage passes to a TAFKAL80ETC concert", 0, 20));
+        update_quality();
+        expect(items[0].quality).toEqual(0);
+      });
+
+      it("should not increase quality > 50", () => {
+        items.push(new Item("Backstage passes to a TAFKAL80ETC concert", 1, 49));
+        update_quality();
+        expect(items[0].quality).toEqual(50);
+      });
     });
 
     describe("Sulfuras", () => {
