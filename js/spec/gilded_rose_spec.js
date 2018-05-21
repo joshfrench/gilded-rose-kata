@@ -76,8 +76,17 @@ describe("Gilded Rose", function() {
     });
 
     describe("Sulfuras", () => {
-      it("should not decrease sell-in");
-      it("should not decrease quality");
+      it("should not decrease sell-in", () => {
+        items.push(new Item("Sulfuras, Hand of Ragnaros", -1, 80));
+        update_quality();
+        expect(items[0].sell_in).toEqual(-1);
+      });
+
+      it("should not decrease quality", () => {
+        items.push(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
+        update_quality();
+        expect(items[0].quality).toEqual(80);
+      });
     });
 
     xdescribe("Conjured items");
