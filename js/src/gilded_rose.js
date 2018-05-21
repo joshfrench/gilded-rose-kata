@@ -76,7 +76,19 @@ function updateSulfuras(item) {
 }
 
 /**
- * I don't love the predicate functions, I think having to keep `isCommon`
+ * And finally, add the new item type:
+ */
+function updateConjured(item) {
+  item.sell_in = item.sell_in - 1;
+  // I'm assuming, based on the spec as written, that conjured items decrease
+  // by 4 after their sell-by. Need to clarify this.
+  item.quality = item.sell_in > 0 ? item.quality - 2 : item.quality - 4;
+  item.quality = Math.max(0, item.quality);
+  return item;
+}
+
+/**
+ * I don't love the predicate functions; I think having to keep `isCommon`
  * and `update_quality` in sync as you add new item categories is a likely
  * future gotcha. But that feels like an incremental enhancement that can
  * wait for later.
@@ -93,8 +105,16 @@ function isSulfuras(item) {
   return item.name == "Sulfuras, Hand of Ragnaros";
 }
 
+function isConjured(item) {
+  return item.name == "Conjured Mana Cake";
+}
+
 function isCommon(item) {
-  return !(isBrie(item) || isBackstage(item) || isSulfuras(item));
+  return !(isBrie(item) ||
+           isBackstage(item) ||
+           isSulfuras(item) ||
+           isConjured(item)
+          );
 }
 
 function update_quality() {
@@ -102,4 +122,5 @@ function update_quality() {
   items.filter(isBrie).map(updateBrie);
   items.filter(isBackstage).map(updateBackstage);
   items.filter(isSulfuras).map(updateSulfuras);
+  items.filter(isConjured).map(updateConjured);
 }
