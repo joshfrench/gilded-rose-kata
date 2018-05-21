@@ -30,6 +30,11 @@ describe("Gilded Rose", function() {
     });
 
     describe("Brie", () => {
+      /**
+       * Is this a bug? The spec doesn't explicitly say Brie increases by
+       * 2, but that's how the current implementation works. Needs
+       * confirmation from stakeholder!
+       */
       it("should increase quality", () => {
         items.push(new Item("Aged Brie", 0, 10));
         update_quality();
@@ -109,6 +114,57 @@ describe("Gilded Rose", function() {
     it("should not decrease quality < 0", () => {
       let item = updateCommonItem(new Item("Foo", 0, 1))
       expect(item.quality).toEqual(0);
+    });
+  });
+
+  describe('updateBrie()', () => {
+    it("should increase quality", () => {
+      let item = updateBrie(new Item("Aged Brie", 0, 10));
+      expect(item.quality).toEqual(12);
+    });
+
+    it("should not increase quality > 50", () => {
+      let item = updateBrie(new Item("Aged Brie", 0, 49));
+      expect(item.quality).toEqual(50);
+    });
+  });
+
+  describe('updateBackstage()', () => {
+    it("should increase quality", () => {
+      let item = updateBackstage(new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20));
+      expect(item.quality).toEqual(21);
+    });
+
+    it("should increase quality by 2 when < 10 days left", () => {
+      let item = updateBackstage(new Item("Backstage passes to a TAFKAL80ETC concert", 10, 20));
+      expect(item.quality).toEqual(22);
+    });
+
+    it("should increase quality by 3 when < 5 days left", () => {
+      let item = updateBackstage(new Item("Backstage passes to a TAFKAL80ETC concert", 5, 20));
+      expect(item.quality).toEqual(23);
+    });
+
+    it("should decrease quality to 0 when past sell-by", () => {
+      let item = updateBackstage(new Item("Backstage passes to a TAFKAL80ETC concert", 0, 20));
+      expect(item.quality).toEqual(0);
+    });
+
+    it("should not increase quality > 50", () => {
+      let item = updateBackstage(new Item("Backstage passes to a TAFKAL80ETC concert", 1, 49));
+      expect(item.quality).toEqual(50);
+    });
+  });
+
+  describe('updateSulfuras', () => {
+    it("should not decrease sell-in", () => {
+      let item = updateSulfuras(new Item("Sulfuras, Hand of Ragnaros", -1, 80));
+      expect(item.sell_in).toEqual(-1);
+    });
+
+    it("should not decrease quality", () => {
+      let item = updateSulfuras(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
+      expect(item.quality).toEqual(80);
     });
   });
 
