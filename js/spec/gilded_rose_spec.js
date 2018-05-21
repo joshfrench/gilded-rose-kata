@@ -1,8 +1,8 @@
 describe("Gilded Rose", function() {
 
-  describe("update_quality()", () => {
-    afterEach(() => items = []);
+  afterEach(() => items = []);
 
+  describe("update_quality()", () => {
     describe("common behaviors", () => {
       it("should decrease sell_in", () => {
         items.push(new Item("Foo", 10, 20));
@@ -88,7 +88,29 @@ describe("Gilded Rose", function() {
         expect(items[0].quality).toEqual(80);
       });
     });
+  });
 
-    xdescribe("Conjured items");
-  })
+  describe('updateCommonItem()', () => {
+    it("should decrease sell_in", () => {
+      let item = updateCommonItem(new Item("Foo", 10, 20));
+      expect(item.sell_in).toEqual(9);
+    });
+
+    it("should decrease quality", () => {
+      let item = updateCommonItem(new Item("Foo", 10, 20));
+      expect(item.quality).toEqual(19);
+    });
+
+    it("should decrease quality by 2 if past sell-by", () => {
+      let item = updateCommonItem(new Item("Foo", 0, 10))
+      expect(item.quality).toEqual(8);
+    });
+
+    it("should not decrease quality < 0", () => {
+      let item = updateCommonItem(new Item("Foo", 0, 1))
+      expect(item.quality).toEqual(0);
+    });
+  });
+
+  xdescribe("updateConjuredItem()");
 });
