@@ -1,5 +1,12 @@
 (ns gilded-rose.core)
 
+(defmulti update-item (fn [{:keys [name]}] name))
+
+(defmethod update-item :default [{:keys [sell-in quality] :as item}]
+  (assoc item :sell-in (- sell-in 1)
+              :quality (max 0
+                            (- quality (if (> sell-in 0) 1 2)))))
+
 (defn update-quality [items]
   (map
     (fn[item] (cond

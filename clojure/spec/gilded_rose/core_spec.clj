@@ -1,5 +1,6 @@
 (ns gilded-rose.core-spec
 (:require [clojure.test :refer :all]
+          [gilded-rose.core :refer [update-quality item update-item]]))
 
 (deftest gilded-rose-test
   (testing "Common items"
@@ -20,4 +21,10 @@
     (is (= -1 (-> [(item "Sulfuras, Hand of Rangaros" -1 80)] update-quality first :sell-in)))
     (is (= 80 (-> [(item "Sulfuras, Hand of Rangaros" 0 80)] update-quality first :quality))))
 
+  (testing "update common item"
+    (let [updated (update-item (item "Foo" 10 20))]
+      (is (= 9  (:sell-in updated)))
+      (is (= 19 (:quality updated))))
+    (is (= 8 (-> (item "Foo" 0 10) update-item :quality)))
+    (is (= 0 (-> (item "Foo" 0 1)  update-item :quality))))
   (testing "Conjured"))
