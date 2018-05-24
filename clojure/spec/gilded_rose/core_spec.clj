@@ -33,4 +33,13 @@
     (is (= 11 (-> (item "Aged Brie" 0  10) update-item :quality)))
     (is (= 50 (-> (item "Aged Brie" 0  50) update-item :quality))))
 
+  (testing "Backstage"
+    (let [name "Backstage passes to a TAFKAL80ETC concert"]
+      (is (= 14 (-> (item name 15 20) update-item :sell-in)))
+      (is (= 21 (-> (item name 15 20) update-item :quality)))
+      (is (= 22 (-> (item name 10 20) update-item :quality)))
+      (is (= 23 (-> (item name 5  20) update-item :quality)))
+      (is (= 0  (-> (item name -1 20) update-item :quality)))
+      (is (= 50 (-> (item name 1  49) update-item :quality)))))
+
   (testing "Conjured"))

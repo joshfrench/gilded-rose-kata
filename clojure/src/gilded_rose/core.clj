@@ -12,6 +12,16 @@
               :quality (min (inc quality)
                             50)))
 
+(defmethod update-item "Backstage passes to a TAFKAL80ETC concert" [{:keys [sell-in quality] :as item}]
+  (assoc item :sell-in (dec sell-in)
+              :quality (min 50
+                            (cond (<= sell-in 0)  0
+                                  (<= sell-in 5)  (+ 3 quality)
+                                  (<= sell-in 10) (+ 2 quality)
+                                  :else           (+ 1 quality)))))
+
+
+
 (defn update-quality [items]
   (map
     (fn[item] (cond
