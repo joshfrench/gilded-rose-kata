@@ -47,4 +47,7 @@
       (is (= -1 (:sell-in updated)))
       (is (= 80 (:quality updated)))))
 
-  (testing "Conjured"))
+  (testing "Conjured"
+    (is (= 19 (-> (item "Conjured Mana Cake" 20 10) update-item :sell-in)))
+    (is (= 8  (-> (item "Conjured Mana Cake" 20 10) update-item :quality)))
+    (is (= 6  (-> (item "Conjured Mana Cake" 0  10) update-item :quality)))))

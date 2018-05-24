@@ -22,6 +22,11 @@
 
 (defmethod update-item "Sulfuras, Hand of Ragnaros" [item] item)
 
+(defmethod update-item "Conjured Mana Cake" [{:keys [sell-in quality] :as item}]
+  (assoc item :sell-in (dec sell-in)
+              :quality (max (- quality (if (> sell-in 0) 2 4))
+                            0)))
+
 (defn update-quality [items]
   (map update-item items))
 
