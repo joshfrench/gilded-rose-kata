@@ -3,9 +3,14 @@
 (defmulti update-item (fn [{:keys [name]}] name))
 
 (defmethod update-item :default [{:keys [sell-in quality] :as item}]
-  (assoc item :sell-in (- sell-in 1)
-              :quality (max 0
-                            (- quality (if (> sell-in 0) 1 2)))))
+  (assoc item :sell-in (dec sell-in)
+              :quality (max (- quality (if (> sell-in 0) 1 2))
+                            0)))
+
+(defmethod update-item "Aged Brie" [{:keys [sell-in quality] :as item}]
+  (assoc item :sell-in (dec sell-in)
+              :quality (min (inc quality)
+                            50)))
 
 (defn update-quality [items]
   (map

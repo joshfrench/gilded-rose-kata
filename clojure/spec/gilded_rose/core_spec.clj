@@ -27,4 +27,10 @@
       (is (= 19 (:quality updated))))
     (is (= 8 (-> (item "Foo" 0 10) update-item :quality)))
     (is (= 0 (-> (item "Foo" 0 1)  update-item :quality))))
+
+  (testing "Brie"
+    (is (= 9  (-> (item "Aged Brie" 10 10) update-item :sell-in)))
+    (is (= 11 (-> (item "Aged Brie" 0  10) update-item :quality)))
+    (is (= 50 (-> (item "Aged Brie" 0  50) update-item :quality))))
+
   (testing "Conjured"))
